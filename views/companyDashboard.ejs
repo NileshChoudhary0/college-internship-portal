@@ -1,0 +1,222 @@
+<%- include('partials/header') %>
+
+  <h1>
+    <%= session.name%> Dashboard
+  </h1>
+  <p>Welcome, Company Representative! 🏢</p>
+  <div class="container mt-4">
+    <h2 class="mb-4">Manage Internships</h2>
+
+    <% if (error) { %>
+      <div class="alert alert-danger">
+        <%= error %>
+      </div>
+      <% } %>
+
+        <% if (success) { %>
+          <div class="alert alert-success">
+            <%= success %>
+          </div>
+          <% } %>
+            <!-- Create Internship Form -->
+            <div class="card mb-4">
+              <div class="card-header bg-primary text-white">
+                Create New Internship
+              </div>
+              <div class="card-body">
+                <form action="/companies/internships/add" method="POST">
+                  <div class="mb-3">
+                    <label class="form-label">Title</label>
+                    <input type="text" class="form-control" name="title" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" name="description" required></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Stipend</label>
+                    <input type="text" class="form-control" name="stipend">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Duration</label>
+                    <input type="text" class="form-control" name="duration" required>
+                  </div>
+               
+
+                  <div class="mb-3">
+                    <label class="form-label">Internship Type</label>
+                    <select class="form-control" name="internship_type" required>
+                      <option value="remote">Remote</option>
+                      <option value="onsite">Onsite</option>
+                      <option value="hybrid">Hybrid</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Internship Timing</label>
+                    <input type="text" class="form-control" name="internship_timing"
+                      placeholder="e.g. Part-time, Full-time">
+                  </div>
+
+                    <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-control" name="location">
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Skills Required</label>
+                    <input type="text" class="form-control" name="skills_required">
+                  </div>
+                    <div class="mb-3">
+                    <label class="form-label">Experience Required</label>
+                    <input type="text" class="form-control" name="experience_required">
+                  </div>
+                  <button type="submit" class="btn btn-success">Create</button>
+                </form>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header bg-secondary text-white">
+                Your Posted Internships
+              </div>
+              <div class="card-body">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Stipend</th>
+                      <th>Duration</th>
+                      <th>Type</th>
+                      <th>Timing</th>
+                      <th>Location</th>
+                      <th>Skills Required</th>
+                      <th>Experience Required</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.forEach(internship=> { %>
+                      <tr>
+                        <td>
+                          <%= internship.title %>
+                        </td>
+                        <td>
+                          <%= internship.description %>
+                        </td>
+                        <td>
+                          <%= internship.stipend %>
+                        </td>
+                        <td>
+                          <%= internship.duration %>
+                        </td>
+                        <td>
+                          <%= internship.internship_type %>
+                        </td>
+                        <td>
+                          <%= internship.internship_timing %>
+                        </td>
+                        <td>
+                          <%= internship.location %>
+                        </td>
+                        <td>
+                          <%= internship.skills_required %>
+                        </td>
+                        <td>
+                          <%= internship.experience_required %>
+                        </td>
+                        <td>
+                          <!-- Edit button -->
+                          <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                            data-bs-target="#editModal<%= internship.internship_id %>">
+                            Edit
+                          </button>
+
+                          <!-- Delete Form -->
+                          <form action="/companies/internships/delete/<%= internship.internship_id %>" method="POST"
+                            style="display:inline;">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                          </form>
+
+                          <!-- View Applications -->
+                          <a href="/companies/internships/<%= internship.internship_id %>/applications"
+                            class="btn btn-sm btn-info">
+                            View Applications
+                          </a>
+                        </td>
+                      </tr>
+
+                      <!-- Edit Modal -->
+                      <div class="modal fade" id="editModal<%= internship.internship_id %>" tabindex="-1">
+                        <div class="modal-dialog modal-lg">
+                          <div class="modal-content">
+                            <form action="/companies/internships/edit/<%= internship.internship_id %>" method="POST">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Edit Internship</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="mb-3">
+                                  <label class="form-label">Title</label>
+                                  <input type="text" class="form-control" name="title" value="<%= internship.title %>"
+                                    required>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Description</label>
+                                  <textarea class="form-control" name="description"
+                                    required><%= internship.description %></textarea>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Stipend</label>
+                                  <input type="text" class="form-control" name="stipend"
+                                    value="<%= internship.stipend %>">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Duration</label>
+                                  <input type="text" class="form-control" name="duration"
+                                    value="<%= internship.duration %>" required>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Internship Type</label>
+                                  <input type="text" class="form-control" name="internship_type"
+                                    value="<%= internship.internship_type %>">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Internship Timing</label>
+                                  <input type="text" class="form-control" name="internship_timing"
+                                    value="<%= internship.internship_timing %>">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Location</label>
+                                  <input type="text" class="form-control" name="location"
+                                    value="<%= internship.location %>">
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Skills Required</label>
+                                  <textarea class="form-control"
+                                    name="skills_required"><%= internship.skills_required %></textarea>
+                                </div>
+                                <div class="mb-3">
+                                  <label class="form-label">Experience Required</label>
+                                  <input type="text" class="form-control" name="experience_required"
+                                    value="<%= internship.experience_required %>">
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <% }) %>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+
+  </div>
+
+  <%- include('partials/footer') %>

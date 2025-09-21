@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+  <section id="applications" class="mb-5">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white">My Applications</div>
+      <div class="card-body">
+        <% if (applications.length> 0) { %>
+          <% applications.forEach(application=> { %>
+            <div class="application-card mb-3 p-2 border rounded">
+              <h5>
+                <%= application.title %> @ <%= application.company_name %>
+              </h5>
+              <p><strong>Industry:</strong>
+                <%= application.industry %>
+              </p>
+              <p><strong>Location:</strong>
+                <%= application.location %>
+              </p>
+              <p><strong>Duration:</strong>
+                <%= application.duration %>
+              </p>
+              <p><strong>Stipend:</strong>
+                <%= application.stipend %>
+              </p>
+              <% if (application.status==="pending" ) { %>
+                <button class="btn btn-warning btn-sm" disabled>Pending</button>
+                <% } else if (application.status==="accepted" ) { %>
+                  <button class="btn btn-success btn-sm" disabled>Selected</button>
+                  <% } else if (application.status==="rejected" ) { %>
+                    <button class="btn btn-danger btn-sm" disabled>Rejected</button>
+                    <% } %>
+            </div>
+            <% }) %>
+              <% } else { %>
+                <p>You haven’t applied to any internships yet.</p>
+                <% } %>
+      </div>
+    </div>
+    <div class="text-center my-4">
+      <a href="/students/internships" class="btn btn-primary btn-lg">
+        <i class="bi bi-briefcase"></i> Apply for Internships
+      </a>
+    </div>
+
+  </section>
+  <%- include('partials/footer') %>

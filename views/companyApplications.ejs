@@ -1,0 +1,61 @@
+<%- include("partials/header") %>
+  
+    <div class="container mt-4">
+        <h2>Applications for Your Internships</h2>
+            <% if (success) { %>
+      <div class="alert alert-success"><%= success %></div>
+    <% } %>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Course</th>
+                    <th>Year</th>
+                    <th>Internship</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% applications.forEach(application=> { %>
+                    <tr>
+                        <td>
+                            <%= application.full_name %>
+                        </td>
+                        <td>
+                            <%= application.course %>
+                        </td>
+                        <td>
+                            <%= application.year %>
+                        </td>
+                        <td>
+                            <%= application.title %>
+                        </td>
+                        <td>
+                            <%= application.status %>
+                        </td>
+                        <td>
+                            <form action="/companies/applications/<%= application.application_id %>/update" method="POST"
+                                style="display:inline;">
+                                <input type="hidden" name="status" value="accepted">
+                                <input type="hidden" name="internship_id" value="<%= application.internship_id %>">
+                                <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                            </form>
+
+                            <form action="/companies/applications/<%= application.application_id %>/update" method="POST"
+                                style="display:inline;">
+                                <input type="hidden" name="status" value="rejected">
+                                <input type="hidden" name="internship_id" value="<%= application.internship_id %>">
+                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+
+
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+
+    <%- include("partials/footer") %>
