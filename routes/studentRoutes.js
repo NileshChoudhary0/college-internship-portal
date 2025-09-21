@@ -139,28 +139,7 @@ router.post("/apply/:id", async (req, res) => {
 // studentRoutes.js
 
 // GET: Show student profile
-router.get("/profile", async (req, res) => {
-  if (!req.session.userId) return res.redirect("/auth/login");
 
-  try {
-    const result = await pool.query(
-      `SELECT s.*, u.email 
-       FROM students s
-       JOIN users u ON s.user_id = u.user_id
-       WHERE s.user_id = $1`,
-      [req.session.userId]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).send("Student not found");
-    }
-
-    res.render("studentProfile", { student: result.rows[0], title: "Profile" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Server error");
-  }
-});
 
 // GET route: Show edit profile form
 router.get("/profile/edit", async (req, res) => {
