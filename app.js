@@ -104,9 +104,9 @@ app.get("/dashboard", async (req, res) => {
   }
   else if (req.session.role == "company") {
     const allData = await pool.query(`select company_id from companies where user_id = $1`, [Number(req.session.userId)]);
-    const company_id = (allData.rows[0]).company_id;
+    const comp_id = (allData.rows[0]).company_id;
 
-    const internshipData = await pool.query(`select * from internships where company_id = $1`, [Number(company_id)]);
+    const internshipData = await pool.query(`select * from internships where company_id = $1`, [Number(comp_id)]);
 
     res.render("companyDashboard", { title: 'Dashboard', data: internshipData.rows, currentRoute: "/dashboard", error: req.query.error, success: req.query.success });
   }
@@ -139,16 +139,44 @@ app.get("/profile", async (req, res) => {
     }
   }
   else if (req.session.role == "company") {
-    const allData = await pool.query(`select company_id from companies where user_id = $1`, [Number(req.session.userId)]);
-    const company_id = (allData.rows[0]).company_id;
+  try {
+      const result = await pool.query(
+        `SELECT c.*, u.email 
+       FROM companies c
+       JOIN users u ON c.user_id = u.user_id
+       WHERE c.user_id = $1`,
+        [req.session.userId]
+      );
 
-    const internshipData = await pool.query(`select * from internships where company_id = $1`, [Number(company_id)]);
+      if (result.rows.length === 0) {
+        return res.status(404).send("Company not found");
+      }
 
-    res.render("companyDashboard", { title: 'Dashboard', data: internshipData.rows, currentRoute: "/dashboard", error: req.query.error, success: req.query.success });
+      res.render("CompanyProfile", { company: result.rows[0], title: "Profile" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+    }
   }
   else if (req.session.role == "admin") {
-    res.render("adminDashboard", { title: 'Dashboard', students, currentRoute: "/dashboard" });
-  } else {
+  try {
+      const result = await pool.query(
+        `SELECT a.*, u.email 
+       FROM admins a
+       JOIN users u ON a.user_id = u.user_id
+       WHERE a.user_id = $1`,
+        [req.session.userId]
+      );
+
+      if (result.rows.length === 0) {
+        return res.status(404).send("Admin not found");
+      }
+
+      res.render("AdminProfile", { admin: result.rows[0], title: "Profile" });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send("Server error");
+    }  } else {
     res.render("login", { title: 'Login', currentRoute: "/auth/login", error: null });
   }
 });

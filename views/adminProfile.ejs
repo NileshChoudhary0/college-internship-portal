@@ -1,0 +1,11 @@
+<%- include("partials/header") %>
+
+<div class="container mt-4">
+  <h2><%= admin.full_name %> - Profile</h2>
+  <p><strong>Name:</strong> <%= admin.full_name %></p>
+  <p><strong>Phone:</strong> <%= admin.phone || "Not provided" %></p>
+      <a href="/admins/profile/edit" class="btn btn-primary mt-3">Edit Profile</a>
+
+</div>
+
+<%- include("partials/footer") %>

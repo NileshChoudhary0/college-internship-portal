@@ -1,0 +1,25 @@
+<%- include("partials/header") %>
+
+<div class="container mt-4">
+  <h2><%= company.company_name %> - Profile</h2>
+  <p><strong>Email:</strong> <%= company.email %></p>
+  <p><strong>Industry:</strong> <%= company.industry || "Not provided" %></p>
+  <p><strong>Location:</strong> <%= company.location || "Not provided" %></p>
+  <p><strong>Website:</strong> 
+    <% if (company.website) { %>
+      <a href="<%= company.website %>" target="_blank"><%= company.website %></a>
+    <% } else { %>
+      Not provided
+    <% } %>
+  </p>
+  <p><strong>About:</strong> <%= company.about || "Not provided" %></p>
+  <% if (company.logo_url) { %>
+    <img src="<%= company.logo_url %>" alt="Company Logo" width="150">
+  <% } else { %>
+    <p>No logo uploaded</p>
+  <% } %>
+      <a href="/companies/profile/edit" class="btn btn-primary mt-3">Edit Profile</a>
+
+</div>
+
+<%- include("partials/footer") %>

@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+
+<div class="card my-4">
+  <div class="card-body">
+    <h2 class="card-title mb-4">Edit Company Profile</h2>
+
+    <form action="/admins/profile/edit" method="POST">
+      <div class="mb-3">
+        <label for="company_name" class="form-label">Name</label>
+        <input type="text" class="form-control" id="full_name" name="full_name" value="<%= admin.full_name %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="industry" class="form-label">Phone</label>
+        <input type="text" class="form-control" id="phone" name="phone" value="<%= admin.phone%>">
+      </div>
+
+      <button type="submit" class="btn btn-success">Update Profile</button>
+      <a href="/profile" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

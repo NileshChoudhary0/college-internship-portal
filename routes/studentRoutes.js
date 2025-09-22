@@ -198,7 +198,7 @@ router.post("/profile/edit", async (req, res) => {
       [full_name, course, year, phone, address, dob, gender, tenth_percentage, twelfth_percentage, cgpa, skills, resume_url, req.session.userId]
     );
 
-    res.redirect("/students/profile?success=Profile+updated");
+    res.redirect('/profile');
   } catch (err) {
     console.error(err);
     res.redirect("/students/profile/edit?error=Something+went+wrong");

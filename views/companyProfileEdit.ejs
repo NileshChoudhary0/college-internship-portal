@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+
+<div class="card my-4">
+  <div class="card-body">
+    <h2 class="card-title mb-4">Edit Company Profile</h2>
+
+    <form action="/companies/profile/edit" method="POST">
+      <div class="mb-3">
+        <label for="company_name" class="form-label">Company Name</label>
+        <input type="text" class="form-control" id="company_name" name="company_name" value="<%= company.company_name %>" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="industry" class="form-label">Industry</label>
+        <input type="text" class="form-control" id="industry" name="industry" value="<%= company.industry %>">
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" class="form-control" id="location" name="location" value="<%= company.location %>">
+      </div>
+
+      <div class="mb-3">
+        <label for="website" class="form-label">Website URL</label>
+        <input type="url" class="form-control" id="website" name="website" value="<%= company.website %>">
+      </div>
+
+      <div class="mb-3">
+        <label for="logo_url" class="form-label">Logo URL</label>
+        <input type="url" class="form-control" id="logo_url" name="logo_url" value="<%= company.logo_url %>">
+      </div>
+
+      <div class="mb-3">
+        <label for="about" class="form-label">About</label>
+        <textarea class="form-control" id="about" name="about" rows="4"><%= company.about %></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success">Update Profile</button>
+      <a href="/profile" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

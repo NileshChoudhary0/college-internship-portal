@@ -16,7 +16,7 @@ const internships = [
 router.post('/internships/add', async (req, res) => {
   const userId = Number(req.session.userId);
   // console.log("userId:" + userId);
-  const { title, description, stipend, duration,internship_type, internship_timing,location, skills_required ,experience_required} = req.body;
+  const { title, description, stipend, duration, internship_type, internship_timing, location, skills_required, experience_required } = req.body;
   const allData = await pool.query(`select company_id from companies where user_id = $1`, [userId]);
   const company_id = (allData.rows[0]).company_id;
 
@@ -24,7 +24,7 @@ router.post('/internships/add', async (req, res) => {
 
 
     const result = await pool.query(`INSERT into internships(company_id,title,description,stipend,duration,internship_type, internship_timing,location, skills_required,experience_required ) VALUES ($1, $2, $3,$4,$5, $6, $7, $8, $9,$10)`,
-      [company_id, title, description, stipend, duration,internship_type, internship_timing,location, skills_required,experience_required]);
+      [company_id, title, description, stipend, duration, internship_type, internship_timing, location, skills_required, experience_required]);
 
     const internshipData = await pool.query(`select * from internships where company_id = $1`, [Number(company_id)]);
     res.redirect("/dashboard?success=Successfully+created+internship.");
@@ -65,7 +65,7 @@ router.post('/internships/delete/:id', async (req, res) => {
 });
 
 router.post('/internships/edit/:id', async (req, res) => {
-  const { title, description, stipend, duration,internship_type, internship_timing,location, skills_required,experience_required } = req.body;
+  const { title, description, stipend, duration, internship_type, internship_timing, location, skills_required, experience_required } = req.body;
   const internship_id = req.params.id;
   const allData = await pool.query(`select company_id from companies where user_id = $1`, [req.session.userId]);
   const company_id = (allData.rows[0]).company_id;
@@ -73,7 +73,7 @@ router.post('/internships/edit/:id', async (req, res) => {
   try {
     await pool.query(`update internships set title=$1,description=$2,stipend=$3,duration=$4,internship_type=$5, internship_timing=$6,
            location=$7, skills_required=$8, experience_required=$9
-       WHERE internship_id=$10 AND company_id=$11`, [title, description, stipend, duration,internship_type, internship_timing,location, skills_required,experience_required, internship_id, company_id]);
+       WHERE internship_id=$10 AND company_id=$11`, [title, description, stipend, duration, internship_type, internship_timing, location, skills_required, experience_required, internship_id, company_id]);
 
     const internshipData = await pool.query(`select * from internships where company_id = $1`, [company_id]);
     res.redirect("/dashboard?success=Successfully+updated+internship.");
@@ -145,5 +145,53 @@ router.post("/applications/:id/update", async (req, res) => {
   }
 });
 
+
+// GET route: Show edit profile form
+router.get("/profile/edit", async (req, res) => {
+  if (!req.session.userId) return res.redirect("/auth/login");
+
+  try {
+    const result = await pool.query(
+      `SELECT c.*, u.email 
+       FROM companies c
+       JOIN users u ON c.user_id = u.user_id
+       WHERE c.user_id = $1`,
+      [req.session.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).send("Company not found");
+    }
+
+    res.render("companyProfileEdit", { company: result.rows[0], title: "Edit Profile" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
+});
+
+router.post("/profile/edit", async (req, res) => {
+  if (!req.session.userId) return res.redirect("/auth/login");
+
+  let {
+    company_name, industry, location, website, logo_url, about
+  } = req.body;
+
+
+  try {
+    await pool.query(
+      `UPDATE companies
+       SET company_name=$1, industry=$2, location=$3, website=$4, logo_url=$5, about=$6
+       WHERE user_id=$7`,
+      [company_name, industry, location, website, logo_url, about
+        , req.session.userId]
+    );
+
+    res.redirect('/profile');
+  } catch (err) {
+    console.error(err);
+    res.redirect("/companies/profile/edit?error=Something+went+wrong");
+  }
+});
 
 module.exports = router;
