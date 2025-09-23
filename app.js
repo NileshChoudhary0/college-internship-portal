@@ -12,6 +12,7 @@ const students = [
   { id: 2, name: "Aman", email: "aman@example.com", course: "BBA", year: "2nd Year", applied: 1 }
 ];
 
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use(session({

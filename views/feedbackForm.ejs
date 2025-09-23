@@ -1,0 +1,26 @@
+<%- include("partials/header") %>
+
+<div class="container mt-5">
+  <h2>Leave Feedback for <%= internship.title %> at <%= internship.company_name %></h2>
+
+  <% if (error) { %>
+    <div class="alert alert-danger"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/students/internships/<%= internship.internship_id %>/feedback">
+    <div class="form-group mb-3">
+      <label for="feedback_text">Your Feedback</label>
+      <textarea
+        class="form-control"
+        id="feedback_text"
+        name="feedback_text"
+        rows="5"
+        required
+      ></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+    <a href="/students/applications" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+
+<%- include("partials/footer") %>

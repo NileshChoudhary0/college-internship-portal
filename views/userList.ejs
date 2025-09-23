@@ -1,56 +1,38 @@
 <%- include('partials/header') %>
 
-  <h1>Users Table</h1>
-  <table class="table table-striped">
-    <thead>
-      <th>
-        ID
-      </th>
-     <th>
-        Name
-      </th>
-      <th>
-        E-Mail
-      </th>
-      <th>
-        Role
-      </th>
-    </thead>
-    <tbody>
-      <% if (data && data.length> 0) { %>
-        <% data.forEach(row=> { %>
-          <tr>
-            <td>
-              <%= row.user_id %>
-            </td>
-           <td>
-              <%= row.name %>
-            </td>
-            <td>
-              <%= row.email %>
-            </td>
-            <td>
-              <%= row.role %>
-            </td>
-          </tr>
-          <% }) %>
-            <!-- <% } else { %>
-              <li>No data found</li>
-              <% } %> -->
-    </tbody>
-  </table>
-  <!-- <ul>
-    <% if (data && data.length> 0) { %>
-      <% data.forEach(row=> { %>
-        <li>
-          ID: <%= row.user_id %> |
-            Username: <%= row.username %> |
-              Email: <%= row.email %> |
-                Role: <%= row.role %>
-        </li>
-        <% }) %>
-          <% } else { %>
-            <li>No data found</li>
-            <% } %>
-  </ul> -->
-  <%- include('partials/footer') %>
+<h1>Users Table</h1>
+<table class="table table-striped">
+  <thead>
+    <th>ID</th>
+    <th>Name</th>
+    <th>E-Mail</th>
+    <th>Role</th>
+    <th>Status</th>
+    <th>Action</th>
+  </thead>
+  <tbody>
+    <% if (data && data.length > 0) { %>
+      <% data.forEach(row => { %>
+        <tr>
+          <td><%= row.user_id %></td>
+          <td><%= row.name %></td>
+          <td><%= row.email %></td>
+          <td><%= row.role %></td>
+         <td>
+  <%= row.is_active ? "Active" : "Banned" %>
+</td>
+<td>
+  <form action="/admins/users/<%= row.user_id %>/toggle-ban" method="POST">
+    <button type="submit" class="btn btn-<%= row.is_active ? 'danger' : 'success' %>">
+      <%= row.is_active ? "Ban" : "Unban" %>
+    </button>
+  </form>
+</td>
+
+        </tr>
+      <% }) %>
+    <% } %>
+  </tbody>
+</table>
+
+<%- include('partials/footer') %>

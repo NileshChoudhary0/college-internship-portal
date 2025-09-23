@@ -9,6 +9,7 @@ router.get('/userList', async (req, res) => {
     u.user_id,
     u.email,
     u.role,
+    u.is_active,
     COALESCE(s.full_name, c.company_name, a.full_name) AS name
 FROM users u
 LEFT JOIN students s ON u.user_id = s.user_id
@@ -65,7 +66,7 @@ router.post("/profile/edit", async (req, res) => {
       `UPDATE admins
        SET full_name=$1, phone=$2
        WHERE user_id=$3`,
-      [full_name, phone,req.session.userId]
+      [full_name, phone, req.session.userId]
     );
 
     res.redirect('/profile');
@@ -74,5 +75,86 @@ router.post("/profile/edit", async (req, res) => {
     res.redirect("/admins/profile/edit?error=Something+went+wrong");
   }
 });
+
+// Toggle ban/unban user
+router.post("/users/:id/toggle-ban", async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const result = await pool.query(
+      "UPDATE users SET is_active = NOT is_active WHERE user_id = $1 RETURNING *",
+      [userId]
+    );
+
+    res.redirect("/admins/userList"); // after action, reload list
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating user status");
+  }
+});
+
+router.get("/internships",async(req,res) =>{
+  if(req.session.role != "admin"){
+    return res.render('unauthorize',{title:"Unauthorize",currentRoute:"/admins/internships"});
+  }
+   try {
+    const result = await pool.query(`
+      SELECT i.*, c.company_name, c.industry, c.location
+      FROM internships i
+      JOIN companies c ON i.company_id = c.company_id
+      ORDER BY i.posted_on DESC
+    `);
+
+    res.render('adminInternships', { title: 'All Internships', data: result.rows, currentRoute: '/admins/internships' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching internships');
+  }
+});
+
+// Delete internship
+router.post('/internships/:id/delete', async (req, res) => {
+  if (req.session.role !== 'admin') {
+    return res.render('unauthorize', { title: 'Unauthorized' });
+  }
+
+  const internshipId = req.params.id;
+
+  try {
+    await pool.query('DELETE FROM internships WHERE internship_id = $1', [internshipId]);
+    res.redirect('/admins/internships'); // reload page after deletion
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error deleting internship');
+  }
+});
+
+
+// View all student applications
+router.get('/applications', async (req, res) => {
+  if (!req.session.userId || req.session.role !== 'admin') {
+    return res.render('unauthorize', { title: 'Unauthorized' });
+  }
+
+  try {
+    const result = await pool.query(`
+      SELECT a.application_id, a.status, 
+             s.full_name, s.course, s.year,
+             i.title AS internship_title,
+             c.company_name
+      FROM applications a
+      JOIN students s ON a.student_id = s.student_id
+      JOIN internships i ON a.internship_id = i.internship_id
+      JOIN companies c ON i.company_id = c.company_id
+      ORDER BY a.application_id DESC
+    `);
+
+    res.render('adminApplications', { title: 'Student Applications', data: result.rows });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching applications');
+  }
+});
+
 
 module.exports = router;

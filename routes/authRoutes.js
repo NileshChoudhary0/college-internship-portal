@@ -7,6 +7,53 @@ router.get("/login", (req, res) => {
   res.render("login", { title: 'Login', currentRoute: "/auth/login", error: null }); // views/login.ejs (we’ll create later)
 });
 
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const result = await pool.query(`
+      SELECT 
+        u.user_id,
+        u.email,
+        u.role,
+        u.password,
+        u.is_active,
+        COALESCE(s.full_name, c.company_name, a.full_name) AS name
+      FROM users u
+      LEFT JOIN students s ON u.user_id = s.user_id
+      LEFT JOIN companies c ON u.user_id = c.user_id
+      LEFT JOIN admins a ON u.user_id = a.user_id
+      WHERE u.email = $1
+    `, [email]);
+
+    if (result.rows.length === 0) {
+      return res.render('login', { error: 'User not found', title: 'Login', currentRoute: '/auth/login' });
+    }
+
+    const user = result.rows[0];
+
+    if (!user.is_active) {
+      // Render the "unauthorize" page if user is banned
+      return res.render('unauthorize', { title: 'Unauthorized', currentRoute: '/auth/login' });
+    }
+    // Password check (assuming plain text, ideally use bcrypt)
+    const match = password === user.password;
+    if (!match) {
+      return res.render('login', { error: 'Incorrect password', title: 'Login', currentRoute: '/auth/login' });
+    }
+
+    // Set session
+    req.session.userId = user.user_id;
+    req.session.role = user.role;
+    req.session.email = user.email;
+    req.session.name = user.name;
+
+    res.redirect('/dashboard');
+
+  } catch (err) {
+    console.error(err);
+    res.render('login', { error: 'Something went wrong. Try again.', title: 'Login', currentRoute: '/auth/login' });
+  }
+});
 
 // register page
 router.get("/students/register", (req, res) => {

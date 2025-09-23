@@ -1,0 +1,224 @@
+/* ================= Global Styles ================= */
+body {
+  font-family: "Comic Sans MS", sans-serif;
+  background: #e9f2fc;
+  color: #003366;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+/* ================= Navigation ================= */
+nav {
+  background-color: #022649;
+  padding: 15px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+nav a:hover, nav a.active {
+  color: beige;
+}
+
+/* ================= Headings ================= */
+h1, h2, h3 {
+  color: #003366;
+  margin-bottom: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.bold-text {
+  font-weight: bold;
+  color: #003366;
+}
+
+.section-headline {
+  font-size: 20px;
+  color: #003366;
+  margin-top: 35px;
+  margin-bottom: 20px;
+  border-left: 4px solid #003366;
+  padding-left: 15px;
+  font-weight: bold;
+  animation: fadeIn 0.9s ease;
+}
+
+/* ================= Containers ================= */
+.container {
+  padding: 30px 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* ================= Boxes ================= */
+.box {
+  background: white;
+  border-left: 5px solid #003366;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+.box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ================= Text Alignment ================= */
+.hey, .welc, .lead {
+  text-align: center;
+  
+}
+
+/* ================= Forms (Login / Register / Apply) ================= */
+.form-container {
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  border-left: 5px solid #022649;
+  animation: slideDown 1s ease;
+  margin: 50px auto;
+}
+
+.form-container h2 {
+  margin-bottom: 20px;
+  color: #022649;
+}
+
+.form-container input, 
+.form-container textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.form-container input:focus,
+.form-container textarea:focus {
+  border-color: #2196f3;
+  box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+  outline: none;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(to right, #2196f3, #1e88e5);
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.form-container button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+}
+
+.form-container p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.form-container a {
+  color: #2196f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.form-container a:hover {
+  text-decoration: underline;
+}
+
+/* ================= Sections ================= */
+.section {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.section.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================= Modals ================= */
+#applyModal {
+  display: none;
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+#applyModal .form-container {
+  position: relative;
+  animation: fadeInScale 0.5s;
+}
+
+#applyModal span.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+/* ================= Animations ================= */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInScale {
+  from { opacity:0; transform:scale(0.8); }
+  to { opacity:1; transform:scale(1); }
+}
+
+/* ================= Utility ================= */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  outline: none;
+}

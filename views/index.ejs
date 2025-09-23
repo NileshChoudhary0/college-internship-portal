@@ -1,10 +1,57 @@
+<!-- views/index.ejs -->
 <%- include('partials/header') %>
 
+<div class="container mt-4">
 
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <h1>Welcome to College Internship Portal 🚀</h1>
-    <p>Select any option from the navigation bar to explore the portal.</p>
+  <!-- Home Section -->
+  <div id="home" class="section active">
+
+    <h1 class="hey">Hey there, Future Intern!</h1>
+    <p class="welc">
+      Welcome to your one-stop destination for all things internships. 
+      From applications-to-achievements — we've got your back!
+    </p>
+
+    <!-- Why Choose Us -->
+    <div class="container">
+      <h2 class="section-headline">Why Choose Us?</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="box">
+            <h3 class="bold-text">🎓 Connect with top companies</h3>
+            <p>Find your perfect internship match easily and quickly.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box">
+            <h3 class="bold-text">💼 Build your career today!</h3>
+            <p>Apply to internships, get mentorship, and grow.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Who We Are -->
+    <div class="container">
+      <h2 class="section-headline">Who We Are?</h2>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="box">
+            <h3 class="bold-text">🚀 Our Mission</h3>
+            <p>We aim to bridge the gap between students and top industries through internship opportunities.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="box">
+            <h3 class="bold-text">🌐 Trusted by Institutions</h3>
+            <p>Over 200+ colleges and companies collaborate with us.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <%- include('partials/footer') %>
 
+</div>
+
+<%- include('partials/footer') %>
